@@ -393,5 +393,14 @@
   </footer>
 </div>
 
+<script>
+  document.querySelectorAll('.flavor-photo').forEach(img => {
+    let scale = 1;
+    img.addEventListener('click', () => {
+      scale *= 1.01;
+      img.style.transform = `scale(${scale})`;
+    });
+  });
+</script>
 </body>
 </html>
