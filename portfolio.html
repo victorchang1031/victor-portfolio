@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Victor Chang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #f5f5f3;
+    --surface: #ffffff;
+    --surface-2: #ffffff;
+    --line: #e7e7e4;
+    --text: #17181a;
+    --muted: #7a7a76;
+    --signal: #ff8a5c;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+  }
+  ::selection{ background: var(--signal); color: #fff; }
+
+  a{ color: inherit; }
+
+  .wrap{
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    padding: 88px 0 56px;
+    position: relative;
+  }
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--signal);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .eyebrow::before{
+    content:"";
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--signal);
+    box-shadow: 0 0 0 4px rgba(255,138,92,0.15);
+    animation: blink 2.4s ease-in-out infinite;
+  }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+
+  h1{
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: clamp(34px, 6vw, 52px);
+    line-height: 1.08;
+    margin: 0 0 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .lede{
+    max-width: 560px;
+    color: var(--muted);
+    font-size: 16px;
+  }
+  .lede strong{ color: var(--text); font-weight: 600; }
+
+  .legend{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 32px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .legend-item{ display:flex; align-items:center; gap:8px; }
+  .dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .dot.on{ background: #d96430; }
+  .dot.dev{ background: #4a63d1; }
+  .dot.live-cycle{ background: #2f9e6e; animation: blink 2.4s ease-in-out infinite; }
+
+  /* ---------- MODULES (bento cards) ---------- */
+  .modules{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 8px 0 40px;
+  }
+  .module-card{
+    background: var(--surface);
+    border-radius: 18px;
+    padding: 30px 30px 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    border-top: 3px solid var(--accent, var(--signal));
+  }
+  .module.music .module-card{ --accent: #ff8a5c; }
+  .module.cookie .module-card{ --accent: #5cc8a8; }
+  .module.gesture .module-card{ --accent: #7c9cff; }
+  .module-head{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .module-tag{
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .status-pill{
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    white-space: nowrap;
+  }
+  .status-pill.live{ background: #fff0e9; color: #d96430; }
+  .status-pill.dev{ background: #eef1ff; color: #4a63d1; }
+  .status-pill.ongoing{ background: #e9f8f2; color: #2f9e6e; }
+
+  .module h2{
+    font-family: var(--sans);
+    font-size: 20px;
+    margin: 6px 0 12px;
+    font-weight: 800;
+  }
+  .module p.desc{
+    color: var(--muted);
+    font-size: 15px;
+    margin: 0 0 20px;
+    max-width: 62ch;
+  }
+
+  .btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: var(--accent, var(--signal));
+    color: #fff;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .btn:hover{ opacity: 0.88; transform: translateY(-1px); }
+  .btn::after{ content:"→"; transition: transform 0.15s ease; }
+  .btn:hover::after{ transform: translateX(3px); }
+
+  .btn.disabled{
+    color: var(--muted);
+    background: var(--line);
+    cursor: default;
+  }
+  .btn.disabled:hover{ opacity:1; transform:none; }
+  .btn.disabled::after{ content: "···"; }
+
+  /* Cookie grid */
+  .flavor-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .flavor{
+    background: #fafaf8;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 14px 13px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .flavor:hover{ border-color: var(--accent); transform: translateY(-2px); }
+  .flavor-icon{ font-size: 20px; display:block; margin-bottom: 8px; }
+  .flavor-plate{
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 32%, #ffffff, #f1eee6 72%);
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.06), 0 6px 14px rgba(0,0,0,0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    overflow: hidden;
+  }
+  .flavor-photo{
+    max-width: 112px;
+    max-height: 112px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 3px 5px rgba(0,0,0,0.25));
+    transition: transform 0.15s ease;
+  }
+  .flavor details summary{
+    cursor: pointer;
+    list-style: none;
+    text-align: center;
+  }
+  .flavor details summary:hover .flavor-photo{ transform: scale(1.06); }
+  .flavor details summary::-webkit-details-marker{ display: none; }
+  .flavor details summary::marker{ content: ""; }
+  .flavor details .flavor-note{ display: block; margin-top: 8px; }
+  .flavor-name{
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .flavor-note{
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .flavor-count{
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 18px;
+  }
+  .flavor-count b{ color: var(--accent); }
+
+  footer{
+    padding: 40px 0 70px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 12px;
+    border-top: 1px solid var(--line);
+    margin-top: 24px;
+    display:flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  @media (max-width: 560px){
+    header{ padding: 56px 0 40px; }
+    .module-card{ padding: 22px 18px; }
+    .flavor-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .eyebrow::before, .dot.live-cycle{ animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">個人作品集</div>
+    <h1>Victor Chang</h1>
+    <div class="legend">
+      <div class="legend-item"><span class="dot on"></span> 已部署</div>
+      <div class="legend-item"><span class="dot dev"></span> 開發中</div>
+    </div>
+  </header>
+
+  <div class="modules">
+
+      <!-- MODULE 1: MUSIC -->
+      <div class="module music">
+        <div class="module-card">
+          <div class="module-head">
+            <span class="module-tag">module · web app</span>
+            <span class="status-pill live"><span class="dot on"></span>已部署</span>
+          </div>
+          <h2>🎵 每日音樂推薦</h2>
+          <p class="desc">
+            以《1001張死前必聽的專輯》為靈感,每天推薦一張專輯,可以評分、閱覽過去紀錄。
+          </p>
+          <a class="btn" href="https://practice-py.fly.dev/albums" target="_blank" rel="noopener">前往網頁</a>
+        </div>
+      </div>
+
+      <!-- MODULE 2: COOKIES -->
+      <div class="module cookie">
+        <div class="module-card">
+          <div class="module-head">
+            <span class="module-tag">module · flavor lab</span>
+            <span class="status-pill ongoing"><span class="dot live-cycle"></span>持續實驗中</span>
+          </div>
+          <h2>🍪 軟餅乾口味實驗室</h2>
+          <p class="desc">
+            把烤餅乾當成配方實驗來記錄——調整麵團比例、配料、烘烤方式,累積出目前 7 款口味。
+          </p>
+          <div class="flavor-grid">
+            <div class="flavor">
+              <details>
+                <summary>
+                  <span class="flavor-plate"><img class="flavor-photo" src="images/cookie-classic-dark-shape.png" alt="經典黑巧"></span>
+                  <span class="flavor-name">經典黑巧</span>
+                </summary>
+                <span class="flavor-note">可可餅乾體,搭水滴巧克力豆與苦甜巧克力塊</span>
+              </details>
+            </div>
+            <div class="flavor">
+              <details>
+                <summary>
+                  <span class="flavor-plate"><img class="flavor-photo" src="images/cookie-tgy-shape.png" alt="可可洋芋片"></span>
+                  <span class="flavor-name">可可洋芋片</span>
+                </summary>
+                <span class="flavor-note">可可餅乾體,搭鹹味洋芋片與苦甜巧克力塊</span>
+              </details>
+            </div>
+            <div class="flavor">
+              <details>
+                <summary>
+                  <span class="flavor-plate"><img class="flavor-photo" src="images/cookie-winter-spice-shape.png" alt="冬季香料"></span>
+                  <span class="flavor-name">冬季香料</span>
+                </summary>
+                <span class="flavor-note">肉桂、薑、荳蔻、丁香四味調香</span>
+              </details>
+            </div>
+            <div class="flavor">
+              <details>
+                <summary>
+                  <span class="flavor-plate"><img class="flavor-photo" src="images/cookie-black-sesame-shape.png" alt="黑芝麻"></span>
+                  <span class="flavor-name">黑芝麻</span>
+                </summary>
+                <span class="flavor-note">黑芝麻醬餅乾體,搭白巧克力與麻糬</span>
+              </details>
+            </div>
+            <div class="flavor">
+              <span class="flavor-icon">🍵</span>
+              <span class="flavor-name">TGY 鐵觀音</span>
+              <span class="flavor-note">茶粉入體,搭白巧克力與烤腰果</span>
+            </div>
+            <div class="flavor">
+              <span class="flavor-icon">🫖</span>
+              <span class="flavor-name">泰式奶茶</span>
+              <span class="flavor-note">泰式奶茶風味</span>
+            </div>
+            <div class="flavor">
+              <span class="flavor-icon">🥃</span>
+              <span class="flavor-name">肉桂黑巧蘭姆葡萄乾燕麥</span>
+              <span class="flavor-note">蘭姆酒漬葡萄乾、肉桂、苦甜巧克力、燕麥</span>
+            </div>
+          </div>
+          <div class="flavor-count">目前累積 <b>7</b> 款口味</div>
+        </div>
+      </div>
+
+      <!-- MODULE 3: GESTURE GAME -->
+      <div class="module gesture pending">
+        <div class="module-card">
+          <div class="module-head">
+            <span class="module-tag">module · interactive</span>
+            <span class="status-pill dev"><span class="dot dev"></span>開發中</span>
+          </div>
+          <h2>🎮 手勢音樂遊戲</h2>
+          <p class="desc">
+            用手勢操控的互動音樂遊戲,鏡頭辨識手指捏合動作來敲擊格子發聲,支援錄製、回放與匯出。
+          </p>
+          <a class="btn" href="https://victorchang1031.github.io/victor-gesture-music/" target="_blank" rel="noopener">前往網頁</a>
+        </div>
+      </div>
+
+    </div>
+
+  <footer>
+    <span>victor — electronics / AIoT in progress</span>
+    <span>持續更新中</span>
+  </footer>
+</div>
+
+</body>
+</html>
