@@ -111,6 +111,7 @@
   .module.music .module-card{ --accent: #ff8a5c; }
   .module.cookie .module-card{ --accent: #5cc8a8; }
   .module.gesture .module-card{ --accent: #7c9cff; }
+  .module.noise .module-card{ --accent: #a97fd0; }
   .module-head{
     display:flex;
     justify-content: space-between;
@@ -442,6 +443,22 @@
         </div>
       </div>
 
+      <!-- MODULE 4: GENRE ROULETTE -->
+      <div class="module noise">
+        <div class="module-card">
+          <div class="module-head">
+            <span class="module-tag">module · data toy</span>
+            <span class="status-pill live"><span class="dot on"></span>已部署</span>
+          </div>
+          <h2>🎲 曲風抽籤機</h2>
+          <span class="module-preview"><img src="images/noise-preview.png" alt="曲風抽籤機網站截圖"></span>
+          <p class="desc">
+            從 Every Noise at Once 抽取 6291 個曲風,隨機抽一個或直接搜尋,每個曲風都能試聽代表曲。
+          </p>
+          <a class="btn" href="noise.html">前往網頁</a>
+        </div>
+      </div>
+
     </div>
 
     <div class="pager-nav">
@@ -450,6 +467,7 @@
         <button class="pager-dot" data-index="0" aria-label="第 1 頁" type="button"></button>
         <button class="pager-dot" data-index="1" aria-label="第 2 頁" type="button"></button>
         <button class="pager-dot" data-index="2" aria-label="第 3 頁" type="button"></button>
+        <button class="pager-dot" data-index="3" aria-label="第 4 頁" type="button"></button>
       </div>
       <button class="pager-btn pager-next" aria-label="下一頁" type="button">›</button>
     </div>
