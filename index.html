@@ -262,7 +262,6 @@
     align-items: center;
     justify-content: center;
     margin: 0 auto 10px;
-    overflow: hidden;
   }
   .flavor-photo{
     max-width: 112px;
@@ -273,11 +272,14 @@
     display: block;
     filter: drop-shadow(0 3px 5px rgba(0,0,0,0.25));
     transition: transform 0.15s ease;
+    position: relative;
+    z-index: 1;
   }
   .flavor details summary{
     cursor: pointer;
     list-style: none;
     text-align: center;
+    user-select: none;
   }
   .flavor details summary:hover .flavor-photo{ transform: scale(1.06); }
   .flavor details summary::-webkit-details-marker{ display: none; }
@@ -481,7 +483,7 @@
   document.querySelectorAll('.flavor-photo').forEach(img => {
     let scale = 1;
     img.addEventListener('click', () => {
-      scale *= 1.01;
+      scale *= 1.06;
       img.style.transform = `scale(${scale})`;
     });
   });
