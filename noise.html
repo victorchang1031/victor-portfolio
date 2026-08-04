@@ -212,6 +212,7 @@
       <div class="actions">
         <button class="act primary" id="playBtn">▶ 試聽</button>
         <a class="act" id="spotifyLink" target="_blank" rel="noopener">Spotify 開啟</a>
+        <a class="act" id="wikiLink" target="_blank" rel="noopener">維基百科</a>
         <a class="act" id="mapLink" target="_blank" rel="noopener">曲風地圖</a>
       </div>
     </div>
@@ -249,6 +250,9 @@
     $('genreMeta').textContent = `熱門度排名 #${genres.indexOf(g) + 1} / ${genres.length}`;
     $('example').textContent = g[EG];
     $('spotifyLink').href = `https://open.spotify.com/track/${g[TRACK]}`;
+    // index.php?search jumps straight to the article when the title matches exactly,
+    // and falls back to the results page otherwise, which most genres need.
+    $('wikiLink').href = `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(g[NAME])}`;
     $('mapLink').href = `https://everynoise.com/engenremap-${slug(g[NAME])}.html`;
     $('result').hidden = false;
     play(g);
