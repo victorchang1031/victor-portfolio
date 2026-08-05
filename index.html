@@ -4,19 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Victor Chang</title>
+<meta name="color-scheme" content="light dark">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #f5f5f3;
     --surface: #ffffff;
-    --surface-2: #ffffff;
     --line: #e7e7e4;
     --text: #17181a;
     --muted: #7a7a76;
     --signal: #ff8a5c;
+    --plate-a: #ffffff;
+    --plate-b: #f1eee6;
+    --flavor-bg: #fafaf8;
+    --card-shadow: 0 4px 20px rgba(0,0,0,0.05);
     --mono: 'JetBrains Mono', monospace;
     --sans: 'Inter', sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg: #131416;
+      --surface: #1c1d20;
+      --line: #2c2e33;
+      --text: #ecedee;
+      --muted: #9a9b9f;
+      --plate-a: #35373c;
+      --plate-b: #24262a;
+      --flavor-bg: #212327;
+      --card-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
   }
   *{ box-sizing: border-box; }
   html{ scroll-behavior: smooth; }
@@ -30,9 +48,10 @@
   ::selection{ background: var(--signal); color: #fff; }
 
   a{ color: inherit; }
+  :focus-visible{ outline: 2px solid var(--signal); outline-offset: 3px; border-radius: 4px; }
 
   .wrap{
-    max-width: 920px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 0 24px;
   }
@@ -72,13 +91,6 @@
     letter-spacing: -0.02em;
   }
 
-  .lede{
-    max-width: 560px;
-    color: var(--muted);
-    font-size: 16px;
-  }
-  .lede strong{ color: var(--text); font-weight: 600; }
-
   .legend{
     display:flex;
     flex-wrap: wrap;
@@ -94,18 +106,22 @@
   .dot.dev{ background: #4a63d1; }
   .dot.live-cycle{ background: #2f9e6e; animation: blink 2.4s ease-in-out infinite; }
 
-  /* ---------- MODULES (bento cards) ---------- */
+  /* ---------- MODULES (bento grid) ---------- */
   .modules{
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     padding: 8px 0 40px;
   }
+  .module.cookie{ grid-column: 1 / -1; }
   .module-card{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     background: var(--surface);
     border-radius: 18px;
     padding: 30px 30px 28px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    box-shadow: var(--card-shadow);
     border-top: 3px solid var(--accent, var(--signal));
   }
   .module.music .module-card{ --accent: #ff8a5c; }
@@ -141,6 +157,11 @@
   .status-pill.live{ background: #fff0e9; color: #d96430; }
   .status-pill.dev{ background: #eef1ff; color: #4a63d1; }
   .status-pill.ongoing{ background: #e9f8f2; color: #2f9e6e; }
+  @media (prefers-color-scheme: dark){
+    .status-pill.live{ background: #3a241b; color: #ff9d70; }
+    .status-pill.dev{ background: #1e2340; color: #93a5ff; }
+    .status-pill.ongoing{ background: #16302a; color: #5fc9a3; }
+  }
 
   .module h2{
     font-family: var(--sans);
@@ -156,6 +177,8 @@
   }
 
   .btn{
+    margin-top: auto;
+    align-self: flex-start;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -173,16 +196,9 @@
   .btn::after{ content:"→"; transition: transform 0.15s ease; }
   .btn:hover::after{ transform: translateX(3px); }
 
-  .btn.disabled{
-    color: var(--muted);
-    background: var(--line);
-    cursor: default;
-  }
-  .btn.disabled:hover{ opacity:1; transform:none; }
-  .btn.disabled::after{ content: "···"; }
-
   /* Module preview screenshot */
   .module-preview{
+    display: block;
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid var(--line);
@@ -190,73 +206,29 @@
     margin-bottom: 18px;
     background: #000;
   }
-  .module-preview img{ display:block; width:100%; height:auto; max-height: 260px; object-fit: cover; object-position: top; }
-
-  /* Pager (page-flip) */
-  .modules{ position: relative; }
-  .modules .module{ display: none; }
-  .modules .module.active{
-    display: block;
-    animation: pageFlip 0.4s ease;
-    transform-origin: left center;
-  }
-  @keyframes pageFlip{
-    from{ opacity:0; transform: perspective(1200px) rotateY(-14deg) translateX(24px); }
-    to{ opacity:1; transform: none; }
-  }
-  .pager-nav{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:18px;
-    margin-top: 6px;
-  }
-  .pager-btn{
-    width:36px; height:36px;
-    border-radius:50%;
-    border:1px solid var(--line);
-    background: var(--surface);
-    color: var(--text);
-    font-size:18px;
-    line-height:1;
-    cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    transition: background 0.15s ease, transform 0.15s ease;
-  }
-  .pager-btn:hover{ background:#f0f0ee; transform: translateY(-1px); }
-  .pager-dots{ display:flex; gap:8px; }
-  .pager-dot{
-    width:8px; height:8px;
-    border-radius:50%;
-    background: var(--line);
-    border:none;
-    padding:0;
-    cursor:pointer;
-    transition: background 0.15s ease, transform 0.15s ease;
-  }
-  .pager-dot.active{ background: var(--signal); transform: scale(1.3); }
+  .module-preview img{ display:block; width:100%; height:auto; }
 
   /* Cookie grid */
   .flavor-grid{
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 12px;
     margin-top: 4px;
   }
   .flavor{
-    background: #fafaf8;
+    background: var(--flavor-bg);
     border: 1px solid var(--line);
     border-radius: 10px;
     padding: 14px 14px 13px;
     transition: border-color 0.15s ease, transform 0.15s ease;
   }
   .flavor:hover{ border-color: var(--accent); transform: translateY(-2px); }
-  .flavor-icon{ font-size: 20px; display:block; margin-bottom: 8px; }
   .flavor-plate{
-    width: 130px;
-    height: 130px;
+    width: 100%;
+    max-width: 130px;
+    aspect-ratio: 1;
     border-radius: 50%;
-    background: radial-gradient(circle at 38% 32%, #ffffff, #f1eee6 72%);
+    background: radial-gradient(circle at 38% 32%, var(--plate-a), var(--plate-b) 72%);
     box-shadow: inset 0 2px 6px rgba(0,0,0,0.06), 0 6px 14px rgba(0,0,0,0.10);
     display: flex;
     align-items: center;
@@ -264,9 +236,7 @@
     margin: 0 auto 10px;
   }
   .flavor-photo{
-    max-width: 112px;
-    max-height: 112px;
-    width: auto;
+    width: 86%;
     height: auto;
     object-fit: contain;
     display: block;
@@ -275,6 +245,7 @@
     position: relative;
     z-index: 1;
   }
+  .flavor-icon{ font-size: 42px; line-height: 1; }
   .flavor details summary{
     cursor: pointer;
     list-style: none;
@@ -314,12 +285,14 @@
     font-size: 12px;
     border-top: 1px solid var(--line);
     margin-top: 24px;
-    display:flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
   }
 
+  @media (max-width: 960px){
+    .modules{ grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 700px){
+    .modules{ grid-template-columns: 1fr; }
+  }
   @media (max-width: 560px){
     header{ padding: 56px 0 40px; }
     .module-card{ padding: 22px 18px; }
@@ -327,7 +300,9 @@
   }
 
   @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
     .eyebrow::before, .dot.live-cycle{ animation: none; }
+    *{ transition: none !important; }
   }
 </style>
 </head>
@@ -340,24 +315,57 @@
     <div class="legend">
       <div class="legend-item"><span class="dot on"></span> 已部署</div>
       <div class="legend-item"><span class="dot dev"></span> 開發中</div>
+      <div class="legend-item"><span class="dot live-cycle"></span> 持續實驗中</div>
     </div>
   </header>
 
-  <div class="modules">
+  <main class="modules">
 
       <!-- MODULE 1: MUSIC -->
-      <div class="module music active">
+      <div class="module music">
         <div class="module-card">
           <div class="module-head">
             <span class="module-tag">module · web app</span>
             <span class="status-pill live"><span class="dot on"></span>已部署</span>
           </div>
           <h2>🎵 每日音樂推薦</h2>
-          <span class="module-preview"><img src="images/music-preview.png" alt="每日音樂推薦網站截圖"></span>
+          <span class="module-preview"><img src="images/music-preview.png" alt="每日音樂推薦網站截圖" width="1280" height="800" decoding="async"></span>
           <p class="desc">
             以《1001張死前必聽的專輯》為靈感,每天推薦一張專輯,可以評分、閱覽過去紀錄。
           </p>
           <a class="btn" href="https://practice-py.fly.dev/albums" target="_blank" rel="noopener">前往網頁</a>
+        </div>
+      </div>
+
+      <!-- MODULE 3: GESTURE GAME -->
+      <div class="module gesture">
+        <div class="module-card">
+          <div class="module-head">
+            <span class="module-tag">module · interactive</span>
+            <span class="status-pill dev"><span class="dot dev"></span>開發中</span>
+          </div>
+          <h2>🎮 手勢音樂遊戲</h2>
+          <span class="module-preview"><img src="images/gesture-preview.png" alt="手勢音樂遊戲網站截圖" width="1280" height="800" loading="lazy" decoding="async"></span>
+          <p class="desc">
+            用手勢操控的互動音樂遊戲,鏡頭辨識手指捏合動作來敲擊格子發聲,錄製、回放與匯出功能開發中。
+          </p>
+          <a class="btn" href="https://victorchang1031.github.io/victor-gesture-music/" target="_blank" rel="noopener">前往網頁</a>
+        </div>
+      </div>
+
+      <!-- MODULE 4: GENRE ROULETTE -->
+      <div class="module noise">
+        <div class="module-card">
+          <div class="module-head">
+            <span class="module-tag">module · data toy</span>
+            <span class="status-pill live"><span class="dot on"></span>已部署</span>
+          </div>
+          <h2>🎲 曲風抽籤機</h2>
+          <span class="module-preview"><img src="images/noise-preview.png" alt="曲風抽籤機網站截圖" width="873" height="311" loading="lazy" decoding="async"></span>
+          <p class="desc">
+            從 Every Noise at Once 抽取 6291 個曲風,隨機抽一個或直接搜尋,每個曲風都能試聽代表曲。
+          </p>
+          <a class="btn" href="noise.html">前往網頁</a>
         </div>
       </div>
 
@@ -376,7 +384,7 @@
             <div class="flavor">
               <details>
                 <summary>
-                  <span class="flavor-plate"><img class="flavor-photo" src="images/cookie-classic-dark-shape.png" alt="經典黑巧"></span>
+                  <span class="flavor-plate"><img class="flavor-photo" src="images/cookie-classic-dark-shape.png" alt="經典黑巧餅乾" width="539" height="513" decoding="async"></span>
                   <span class="flavor-name">經典黑巧</span>
                 </summary>
                 <span class="flavor-note">可可餅乾體,搭水滴巧克力豆與苦甜巧克力塊</span>
@@ -385,7 +393,7 @@
             <div class="flavor">
               <details>
                 <summary>
-                  <span class="flavor-plate"><img class="flavor-photo" src="images/cookie-tgy-shape.png" alt="可可洋芋片"></span>
+                  <span class="flavor-plate"><img class="flavor-photo" src="images/cookie-tgy-shape.png" alt="可可洋芋片餅乾" width="600" height="539" decoding="async"></span>
                   <span class="flavor-name">可可洋芋片</span>
                 </summary>
                 <span class="flavor-note">可可餅乾體,搭鹹味洋芋片與苦甜巧克力塊</span>
@@ -394,7 +402,7 @@
             <div class="flavor">
               <details>
                 <summary>
-                  <span class="flavor-plate"><img class="flavor-photo" src="images/cookie-winter-spice-shape.png" alt="冬季香料"></span>
+                  <span class="flavor-plate"><img class="flavor-photo" src="images/cookie-winter-spice-shape.png" alt="冬季香料餅乾" width="623" height="600" decoding="async"></span>
                   <span class="flavor-name">冬季香料</span>
                 </summary>
                 <span class="flavor-note">肉桂、薑、荳蔻、丁香四味調香</span>
@@ -403,76 +411,45 @@
             <div class="flavor">
               <details>
                 <summary>
-                  <span class="flavor-plate"><img class="flavor-photo" src="images/cookie-black-sesame-shape.png" alt="黑芝麻"></span>
+                  <span class="flavor-plate"><img class="flavor-photo" src="images/cookie-black-sesame-shape.png" alt="黑芝麻餅乾" width="555" height="508" decoding="async"></span>
                   <span class="flavor-name">黑芝麻</span>
                 </summary>
                 <span class="flavor-note">黑芝麻醬餅乾體,搭白巧克力與麻糬</span>
               </details>
             </div>
             <div class="flavor">
-              <span class="flavor-icon">🍵</span>
-              <span class="flavor-name">TGY 鐵觀音</span>
-              <span class="flavor-note">茶粉入體,搭白巧克力與烤腰果</span>
+              <details>
+                <summary>
+                  <span class="flavor-plate"><span class="flavor-icon">🍵</span></span>
+                  <span class="flavor-name">TGY 鐵觀音</span>
+                </summary>
+                <span class="flavor-note">茶粉入體,搭白巧克力與烤腰果</span>
+              </details>
             </div>
             <div class="flavor">
-              <span class="flavor-icon">🫖</span>
-              <span class="flavor-name">泰式奶茶</span>
-              <span class="flavor-note">融入泰式手打茶及煉乳</span>
+              <details>
+                <summary>
+                  <span class="flavor-plate"><span class="flavor-icon">🫖</span></span>
+                  <span class="flavor-name">泰式奶茶</span>
+                </summary>
+                <span class="flavor-note">融入泰式手打茶及煉乳</span>
+              </details>
             </div>
             <div class="flavor">
-              <span class="flavor-icon">🥃</span>
-              <span class="flavor-name">肉桂黑巧蘭姆葡萄乾燕麥</span>
-              <span class="flavor-note">蘭姆酒漬葡萄乾、肉桂、苦甜巧克力、燕麥</span>
+              <details>
+                <summary>
+                  <span class="flavor-plate"><span class="flavor-icon">🥃</span></span>
+                  <span class="flavor-name">肉桂黑巧蘭姆葡萄乾燕麥</span>
+                </summary>
+                <span class="flavor-note">蘭姆酒漬葡萄乾、肉桂、苦甜巧克力、燕麥</span>
+              </details>
             </div>
           </div>
           <div class="flavor-count">目前累積 <b>7</b> 款口味</div>
         </div>
       </div>
 
-      <!-- MODULE 3: GESTURE GAME -->
-      <div class="module gesture pending">
-        <div class="module-card">
-          <div class="module-head">
-            <span class="module-tag">module · interactive</span>
-            <span class="status-pill dev"><span class="dot dev"></span>開發中</span>
-          </div>
-          <h2>🎮 手勢音樂遊戲</h2>
-          <span class="module-preview"><img src="images/gesture-preview.png" alt="手勢音樂遊戲網站截圖"></span>
-          <p class="desc">
-            用手勢操控的互動音樂遊戲,鏡頭辨識手指捏合動作來敲擊格子發聲,錄製、回放與匯出功能開發中。
-          </p>
-          <a class="btn" href="https://victorchang1031.github.io/victor-gesture-music/" target="_blank" rel="noopener">前往網頁</a>
-        </div>
-      </div>
-
-      <!-- MODULE 4: GENRE ROULETTE -->
-      <div class="module noise">
-        <div class="module-card">
-          <div class="module-head">
-            <span class="module-tag">module · data toy</span>
-            <span class="status-pill live"><span class="dot on"></span>已部署</span>
-          </div>
-          <h2>🎲 曲風抽籤機</h2>
-          <span class="module-preview"><img src="images/noise-preview.png" alt="曲風抽籤機網站截圖"></span>
-          <p class="desc">
-            從 Every Noise at Once 抽取 6291 個曲風,隨機抽一個或直接搜尋,每個曲風都能試聽代表曲。
-          </p>
-          <a class="btn" href="noise.html">前往網頁</a>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="pager-nav">
-      <button class="pager-btn pager-prev" aria-label="上一頁" type="button">‹</button>
-      <div class="pager-dots">
-        <button class="pager-dot" data-index="0" aria-label="第 1 頁" type="button"></button>
-        <button class="pager-dot" data-index="1" aria-label="第 2 頁" type="button"></button>
-        <button class="pager-dot" data-index="2" aria-label="第 3 頁" type="button"></button>
-        <button class="pager-dot" data-index="3" aria-label="第 4 頁" type="button"></button>
-      </div>
-      <button class="pager-btn pager-next" aria-label="下一頁" type="button">›</button>
-    </div>
+  </main>
 
   <footer>
     <span>持續更新中</span>
@@ -486,22 +463,11 @@
       scale *= 1.03;
       img.style.transform = `scale(${scale})`;
     });
+    img.addEventListener('dblclick', () => {
+      scale = 1;
+      img.style.transform = '';
+    });
   });
-
-  (() => {
-    const pages = document.querySelectorAll('.modules > .module');
-    const dots = document.querySelectorAll('.pager-dot');
-    let index = 0;
-    const show = i => {
-      index = (i + pages.length) % pages.length;
-      pages.forEach((p, n) => p.classList.toggle('active', n === index));
-      dots.forEach((d, n) => d.classList.toggle('active', n === index));
-    };
-    document.querySelector('.pager-prev').addEventListener('click', () => show(index - 1));
-    document.querySelector('.pager-next').addEventListener('click', () => show(index + 1));
-    dots.forEach(d => d.addEventListener('click', () => show(+d.dataset.index)));
-    show(0);
-  })();
 </script>
 </body>
 </html>
